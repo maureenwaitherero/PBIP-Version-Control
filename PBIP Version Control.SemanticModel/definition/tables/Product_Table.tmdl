@@ -1,0 +1,57 @@
+table Product_Table
+	lineageTag: b20a667a-9b5d-4861-ace8-c9aca2377567
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 2df6928b-f5a1-4fac-af9c-b502620b7909
+		summarizeBy: count
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: c3d01302-f743-400a-ade3-2ceb99e3938d
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 86ce7a10-cda5-4c43-949e-7fa5941a3280
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column ManufacturerID
+		dataType: int64
+		formatString: 0
+		lineageTag: b661cc98-79b0-40e0-a732-745b339c0551
+		summarizeBy: count
+		sourceColumn: ManufacturerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Price
+		dataType: string
+		lineageTag: 0400182b-c12c-4c7e-b395-22074b246c05
+		summarizeBy: none
+		sourceColumn: Price
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Product_Table = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\DIAD\Data\USSales\bi_dimensions.xlsx"), null, true),
+				    Product_Table_Table = Source{[Item="Product_Table",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Product_Table_Table,{{"ProductID", Int64.Type}, {"Product", type text}, {"Category", type text}, {"ManufacturerID", Int64.Type}, {"Price", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

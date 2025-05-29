@@ -1,0 +1,64 @@
+table geo
+	lineageTag: a84fd33f-61e9-45a3-b7e2-e1e8616dd4a9
+
+	column Source:
+		dataType: string
+		lineageTag: b583ebaa-4190-4f42-b7d1-b5febd48492c
+		summarizeBy: none
+		sourceColumn: Source:
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Public Database '
+		dataType: string
+		lineageTag: 3cbdb0f0-65b8-4d20-a409-3d21a0e2258a
+		summarizeBy: none
+		sourceColumn: "Public Database "
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column3
+		dataType: string
+		lineageTag: 5b6c4a53-20dc-4e41-a936-5b95a55b3db2
+		summarizeBy: none
+		sourceColumn: Column3
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column4
+		dataType: string
+		lineageTag: 3ff16bf5-b9fd-43b0-8ebc-0993332ceb0d
+		summarizeBy: none
+		sourceColumn: Column4
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column5
+		dataType: string
+		lineageTag: a9ae627d-50fb-4671-8a37-f079625ed00b
+		summarizeBy: none
+		sourceColumn: Column5
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column6
+		dataType: string
+		lineageTag: 9ff0eb92-4633-417e-a1e5-3b2bebbf3af4
+		summarizeBy: none
+		sourceColumn: Column6
+
+		annotation SummarizationSetBy = Automatic
+
+	partition geo = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\DIAD\Data\USSales\bi_dimensions.xlsx"), null, true),
+				    geo_Sheet = Source{[Item="geo",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(geo_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Source:", type text}, {"Public Database ", type any}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
